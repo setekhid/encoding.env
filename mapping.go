@@ -1,6 +1,7 @@
 package env
 
 import (
+	"bytes"
 	"errors"
 	"reflect"
 	"strconv"
@@ -33,7 +34,7 @@ func DefaultOptions() Options {
 func NewMapping() Mapping { return Mapping{} }
 
 func (m Mapping) Map(obj interface{}) error {
-	return m.MapWithPrefix("", obj)
+	return m.MapWithPrefix(ENCODING_ENV_PREFIX, obj)
 }
 
 func (m Mapping) MapWithPrefix(pre string, obj interface{}) error {
@@ -41,6 +42,10 @@ func (m Mapping) MapWithPrefix(pre string, obj interface{}) error {
 }
 
 func (m Mapping) store(key []byte, val reflect.Value, opts Options) error {
+
+	if ENCODING_ENV_UPPERCASE {
+		key = bytes.ToUpper(key)
+	}
 
 	if _, exists := m[string(key)]; exists {
 		return errors.New("duplicated env variable name " + string(key))

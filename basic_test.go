@@ -13,6 +13,8 @@ import (
 func TestBasic(t *testing.T) {
 	t.Parallel()
 
+	env.ENCODING_ENV_UPPERCASE = true
+
 	type cType struct {
 		CA float32 `env:"ca,omitempty"`
 		CB uint16  `env:"cb"`
